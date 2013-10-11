@@ -4,20 +4,19 @@
 using namespace std;
 using namespace arma;
 
-int RK4 ( int i, double h, double t, mat *u, mat *du,
-          vec (*func)(double t, mat *u, mat *du) )
+int RK4 ( double h, double t, mat *u,
+          mat (*func)(double t, mat *u) )
 {
-        static vec k1, k2, k3, k4;
+        static mat *k1, *k2, *k3, *k4;
+        static mat temp1, temp2, temp3;
 
-        /*
-        k1 = h*func(t, &u[i], &du[i]);
-        k2 = h*func(t + h/2, u[i] + k1/2, du[i] + k1/2);
-        k3 = h*func(t + h/2, u[i] + k2/2, du[i] + k2/2);
-        k4 = h*func(t + h, u[i] + k3, du[i] + k3);
-
-        du[i+1] = du[i] + (k1 + k2 + k3 + k4)/6;
-        u[i+1] = 2;
-        */
+        *k1 = h*func(t, u);
+        temp1 = (*u + *k1/2);
+        *k2 = h*func(t + h/2, &temp1);
+        temp2 = (*u + *k2/2);
+        *k3 = h*func(t + h/2, &temp2);
+        temp3 = (*u + *k3);
+        *k4 = h*func(t + h, &temp3);
 
         return 0;
 }

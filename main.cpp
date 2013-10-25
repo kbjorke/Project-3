@@ -1,15 +1,22 @@
-#include <iostream>
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <unittest++/UnitTest++.h>
-#include <celestial_body.h>
+#include "unittest++/UnitTest++.h"
+#include "celestial_body.h"
+#include "read_file.h"
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+    Celestial_Body *celest_bodies;
+
+    read_file(argv[1], &celest_bodies);
+
+    cout << celest_bodies[1].ID << endl;
+
+    /*
     char ID[20], dummy[20], pos[20], vel[20];
     char *p_value, *v_value;
     int dimension, objects , planet_nr, i;
@@ -57,5 +64,6 @@ int main(int argc, char* argv[])
     input_file.close();
 
     return 0;
+    */
 }
 

@@ -10,7 +10,6 @@ Celestial_Body::Celestial_Body(char *_ID, double _mass, int _dimension,
     static int i;
 
     strcpy(ID, _ID);
-    cout << _ID << endl;
     mass = _mass;
     dimension = _dimension;
 

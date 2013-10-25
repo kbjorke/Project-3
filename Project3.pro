@@ -13,4 +13,5 @@ LIBS += -larmadillo -lblas -llapack -lunittest++ -lrt
 HEADERS += \
     celestial_body.h \
     planetary_system.h \
-    read_file.h
+    read_file.h \
+    RungeKutta4.h

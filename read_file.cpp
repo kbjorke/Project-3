@@ -7,23 +7,23 @@
 
 using namespace std;
 
-void read_file(char* filename, Celestial_Body **celest_bodies)
+void read_file(char* filename, Celestial_Body **celest_bodies, int *objects)
 {
     char ID[20], dummy[20], pos[20], vel[20];
     char *p_value, *v_value;
-    int dimension, objects, planet_nr, i;
+    int dimension, objec, planet_nr, i;
     double mass;
 
 
     fstream input_file;
     input_file.open(filename, ios::in);
 
-    input_file >> dummy >> dimension >> dummy >> objects;
-
+    input_file >> dummy >> dimension >> dummy >> objec;
+    *objects = objec;
 
     double position[dimension], velocity[dimension];
 
-    *celest_bodies = new Celestial_Body[objects];
+    *celest_bodies = new Celestial_Body[objec];
 
     input_file >> dummy >> dummy >> dummy >> dummy;
 

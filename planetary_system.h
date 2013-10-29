@@ -14,9 +14,10 @@ class Planetary_System
 public:
     Celestial_Body *celest_bodies;
 
-    Planetary_System(Celestial_Body *celest_bodies, int objects);
-    void evolve(double end_time, double time_step);
-    static mat gravity_function(double t, mat u);
+    Planetary_System(Celestial_Body *celest_bodies, int objects, int dimension);
+    Planetary_System();
+    void evolve(char *output_filename, double end_time, double time_step);
+    mat gravity_function(double t, mat u);
 };
 
 #endif // PLANETARY_SYSTEM_H

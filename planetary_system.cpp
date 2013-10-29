@@ -24,8 +24,8 @@ Planetary_System::Planetary_System()
 
 void Planetary_System::evolve(char *output_filename, double end_time, double time_step)
 {
-    int i, j;
-    double time;
+    int i, j, step;
+    double time, steps;
 
     fstream myfile;
     myfile.open(output_filename, ios::out);
@@ -37,15 +37,18 @@ void Planetary_System::evolve(char *output_filename, double end_time, double tim
 
     static mat k1, k2, k3, k4;
 
-    //steps = ceil(end_time/time_step);
+    steps = ceil(end_time/time_step);
 
     mat u(objects, 2*dimension);
 
     myfile << "Time" << '\t';
     for (i = 0; i < objects; i++)
     {
+        myfile << celest_bodies[i].ID << '\t';
+        /*
         myfile << "Position," << celest_bodies[i].ID << '\t'
                << "Velocity," << celest_bodies[i].ID << '\t';
+        */
     }
     myfile << endl;
 
@@ -67,7 +70,8 @@ void Planetary_System::evolve(char *output_filename, double end_time, double tim
             }
             myfile << celest_bodies[i].position[j];
         }
-        myfile << ")" << '\t' << "(";
+        myfile << ")" << '\t'; // << "(";
+        /*
         for( j = 0; j < dimension; j++ ){
             if (j > 0 ){
                 myfile << ",";
@@ -75,12 +79,15 @@ void Planetary_System::evolve(char *output_filename, double end_time, double tim
             myfile << celest_bodies[i].velocity[j];
         }
         myfile << ")" << '\t';
+        */
     }
     myfile << endl;
 
 
-    for( time = time_step; time < end_time; time+=time_step )
+    for( step = 1; step <= steps; step++ )
     {
+        time = time_step*step;
+
         k1 = time_step*gravity_function(time, u);
         k2 = time_step*gravity_function(time + time_step/2, (u + k1/2));
         k3 = time_step*gravity_function(time + time_step/2, (u + k2/2));
@@ -104,7 +111,8 @@ void Planetary_System::evolve(char *output_filename, double end_time, double tim
                 }
                 myfile << celest_bodies[i].position[j];
             }
-            myfile << ")" << '\t' << "(";
+            myfile << ")" << '\t'; // << "(";
+            /*
             for( j = 0; j < dimension; j++ ){
                 if (j > 0 ){
                     myfile << ",";
@@ -112,6 +120,7 @@ void Planetary_System::evolve(char *output_filename, double end_time, double tim
                 myfile << celest_bodies[i].velocity[j];
             }
             myfile << ")" << '\t';
+            */
         }
         myfile << endl;
 
@@ -147,13 +156,13 @@ mat Planetary_System::gravity_function(double t, mat u)
                 distance = sqrt(distance);
                 for( i = 0; i < dimension; i++ )
                 {
-                    force[i] += (4*pi*celest_bodies[other_object].mass) /
-                            pow(distance,3)*(u(object,i) - u(other_object,i));
+                    force[i] -= (4*pi*celest_bodies[other_object].mass) /
+                            pow(distance,3);
                 }
             }
             for( i = 0; i < dimension; i++ )
             {
-                u_new(object, dimension+i) = force[i];
+                u_new(object, dimension+i) = force[i]*(u(object,i) - u(other_object,i));
             }
         }
     }

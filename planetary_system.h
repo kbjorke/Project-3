@@ -10,13 +10,16 @@ class Planetary_System
 {
     int objects;
     int dimension;
+    double total_energy, *total_momentum;
 
 public:
     Celestial_Body *celest_bodies;
 
-    Planetary_System(Celestial_Body *celest_bodies, int objects, int dimension);
+    Planetary_System(Celestial_Body *celest_bodies,
+                     int objects, int dimension);
     Planetary_System();
-    void evolve(char *output_filename, double end_time, double time_step);
+    void evolve(char *output_filename,
+                double end_time, double time_step);
     mat gravity_function(double t, mat u);
 };
 

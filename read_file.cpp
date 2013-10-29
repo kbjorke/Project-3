@@ -7,7 +7,8 @@
 
 using namespace std;
 
-void read_file(char* filename, Celestial_Body **celest_bodies, int *objects, int *dimension)
+void read_file(char* filename, Celestial_Body **celest_bodies,
+               int *objects, int *dimension)
 {
     char ID[20], dummy[20], pos[20], vel[20];
     char *p_value, *v_value;

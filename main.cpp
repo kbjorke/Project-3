@@ -18,10 +18,12 @@ int main(int argc, char* argv[])
     input_file = argv[argc-1];
 
     for( i = 0; i < argc-1; i++ ){
-        if((string(argv[i]).find("-") == 0 && string(argv[i]).find("time")!=string::npos)){
+        if((string(argv[i]).find("-")) == 0 &&
+                (string(argv[i]).find("time")!=string::npos)){
             end_time = atof(argv[i+1]);
         }
-        if((string(argv[i]).find("-") == 0 && string(argv[i]).find("h")!=string::npos)){
+        if((string(argv[i]).find("-") == 0) &&
+                (string(argv[i]).find("h")!=string::npos)){
             time_step = atof(argv[i+1]);
         }
     }

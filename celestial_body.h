@@ -8,6 +8,7 @@ public:
     int dimension;
     double mass; //[1/M_sun]
     double *position, *velocity; //[AU], [AU/yr]
+    double potential_energy, kinetic_energy;
 
     Celestial_Body(char *_ID, double _mass, int _dimension,
                    double *_position, double *_velocity);

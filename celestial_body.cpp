@@ -7,10 +7,12 @@ using namespace std;
 Celestial_Body::Celestial_Body(char *_ID, double _mass, int _dimension,
                                double *_position, double *_velocity)
 {
-    static int i;
+    double M_sun = 2e30; // [kg]
+    double pi = 3.1415926535897;
+    int i;
 
     strcpy(ID, _ID);
-    mass = _mass;
+    mass = _mass/M_sun;
     dimension = _dimension;
 
     position = new double[dimension];

@@ -4,6 +4,7 @@
 using namespace std;
 using namespace arma;
 
+
 void RK4 ( double h, double t, mat *u,
          mat (*func)(double t, mat u) )
 {

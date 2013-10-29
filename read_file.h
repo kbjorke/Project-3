@@ -3,6 +3,6 @@
 
 #include "celestial_body.h"
 
-void read_file(char* filename, Celestial_Body **celest_bodies, int *objects);
+void read_file(char* filename, Celestial_Body **celest_bodies, int *objects, int *dimension);
 
 #endif // READ_FILE_H

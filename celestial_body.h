@@ -6,8 +6,8 @@ class Celestial_Body
 public:
     char ID[20];
     int dimension;
-    double mass;
-    double *position, *velocity;
+    double mass; //[1/M_sun]
+    double *position, *velocity; //[AU], [AU/yr]
 
     Celestial_Body(char *_ID, double _mass, int _dimension,
                    double *_position, double *_velocity);

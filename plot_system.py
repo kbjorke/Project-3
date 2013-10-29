@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # filename = sys.argv[-1]
-filename = "../Project3-build/output_EarthJupiterSunSystem.txt"
+filename = "../Project3-build/output_EarthSunSystem.txt"
 
 input_file = open(filename, 'r')
 
@@ -21,6 +21,8 @@ for line in input_file:
         
         positions = np.zeros([object_nr, dimensions, steps])
         time = np.zeros(steps)
+        total_energy = np.zeros(steps)
+        total_momentum = np.zeros([dimensions,steps])
         objects = []
 
     if i == -1:
@@ -29,10 +31,18 @@ for line in input_file:
 
     if i >= 0:
         time[i] = float(column[0])
+        
         for j in range(object_nr):
             coordinate = column[j+1][1:-1].split(",")
             for k in range(dimensions):
                 positions[j][k][i] = float(coordinate[k])
+            
+        total_energy[i] = float(column[object_nr+1])
+
+        momentum = column[object_nr+2][1:-1].split(",")
+        for k in range(dimensions):
+            total_momentum[k][i] = float(momentum[k])
+
 
     i += 1
 
@@ -51,4 +61,16 @@ if dimensions == 2:
         plt.hold('on')
 
     plt.axis("equal")
-    plt.show()
+    plt.hold('off')
+
+plt.figure(2)
+for j in range(dimensions):
+    plt.plot(time, total_momentum[j]/max(total_momentum[j]))
+    plt.hold('on')
+plt.hold('off')
+plt.axis([0,end_time, -1.3, 1.3])
+
+plt.figure(3)
+plt.plot(time,total_energy)
+
+plt.show()

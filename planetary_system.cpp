@@ -46,7 +46,8 @@ Planetary_System::Planetary_System(Celestial_Body *celest_bodies,
                 distance = sqrt(distance);
 
                 celest_bodies[object].potential_energy -=
-                        (4*pi*pi*celest_bodies[other_object].mass)/distance;
+                        (4*pi*pi*celest_bodies[other_object].mass*
+                         celest_bodies[object].mass)/distance;
             }
         }
         total_energy += celest_bodies[object].potential_energy +
@@ -68,7 +69,7 @@ void Planetary_System::evolve(char *output_filename,
                               double end_time, double time_step)
 {
     int i, j, step;
-    double time, steps;
+    double steps;
     double speed_sqr;
 
     fstream myfile;
@@ -114,6 +115,12 @@ void Planetary_System::evolve(char *output_filename,
             }
             myfile << celest_bodies[i].position[j];
         }
+        //myfile << "," << celest_bodies[i].kinetic_energy;
+        //myfile << "," << celest_bodies[i].potential_energy;
+        myfile << "," << celest_bodies[i].velocity[0]*
+                  celest_bodies[i].mass;
+        myfile << "," << celest_bodies[i].velocity[1]*
+                  celest_bodies[i].mass;
         myfile << ")" << '\t'; // << "(";
         /*
         for( j = 0; j < dimension; j++ ){
@@ -181,6 +188,12 @@ void Planetary_System::evolve(char *output_filename,
                 }
                 myfile << celest_bodies[i].position[j];
             }
+            //myfile << "," << celest_bodies[i].kinetic_energy;
+            //myfile << "," << celest_bodies[i].potential_energy;
+            myfile << "," << celest_bodies[i].velocity[0]*
+                      celest_bodies[i].mass;
+            myfile << "," << celest_bodies[i].velocity[1]*
+                      celest_bodies[i].mass;
             myfile << ")" << '\t'; // << "(";
             /*
             for( j = 0; j < dimension; j++ ){
@@ -214,20 +227,33 @@ mat Planetary_System::gravity_function(double t, mat u)
     static double distance;
     static double pi = 3.1415926535897;
 
-    double force[dimension];
-    double abs_force;
+    double force; //[dimension];
+    double potential;
     static mat u_new(objects, dimension*2);
 
     for( object = 0; object < objects; object++ ){
-        abs_force = 0;
+        if( t == time ){
         celest_bodies[object].potential_energy = 0;
+        }
 
         for( i = 0; i < dimension; i++ )
         {
             u_new(object, i) = u(object, dimension+i);
-            force[i] = 0;
+
+            u_new(object, dimension+i) = 0;
         }
+
         for( other_object = 0; other_object < objects; other_object++ ){
+            potential = 0;
+
+            force = 0;
+            /*
+            for( i = 0; i < dimension; i++ )
+            {
+                force[i] = 0;
+            }
+            */
+
             if( object != other_object )
             {
                 distance = 0;
@@ -237,21 +263,29 @@ mat Planetary_System::gravity_function(double t, mat u)
                             (u(object,i) - u(other_object,i));
                 }
                 distance = sqrt(distance);
+
+                force = -(4*pi*pi*celest_bodies[other_object].mass)/
+                            pow(distance,3);
+                /*
                 for( i = 0; i < dimension; i++ )
                 {
-                    force[i] -= (4*pi*pi*celest_bodies[other_object].mass)/
+                    force[i] = -(4*pi*pi*celest_bodies[other_object].mass)/
                             pow(distance,3);
-
-                    abs_force += force[i]*force[i];
                 }
-                abs_force = sqrt(abs_force);
+                */
 
-                celest_bodies[object].potential_energy -= abs_force*distance;
-            }
-            for( i = 0; i < dimension; i++ )
-            {
-                u_new(object, dimension+i) = force[i]*
-                        (u(object,i) - u(other_object,i));
+                potential = -(4*pi*pi*celest_bodies[object].mass*
+                              celest_bodies[other_object].mass)/distance;
+
+                if( t == time ){
+                        celest_bodies[object].potential_energy +=
+                                potential;
+                }
+                for( i = 0; i < dimension; i++ )
+                {
+                    u_new(object, dimension+i) += force* //[i]*
+                            (u(object,i) - u(other_object,i));
+                }
             }
         }
     }

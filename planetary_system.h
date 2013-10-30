@@ -11,6 +11,7 @@ class Planetary_System
     int objects;
     int dimension;
     double total_energy, *total_momentum;
+    double time;
 
 public:
     Celestial_Body *celest_bodies;

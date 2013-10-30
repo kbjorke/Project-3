@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # filename = sys.argv[-1]
-filename = "../Project3-build/output_EarthSunSystem.txt"
+filename = "../Project3-build/output_EarthJupiterSunSystem.txt"
 
 input_file = open(filename, 'r')
 
@@ -71,6 +71,6 @@ plt.hold('off')
 plt.axis([0,end_time, -1.3, 1.3])
 
 plt.figure(3)
-plt.plot(time,total_energy)
+plt.plot(time,total_energy/total_energy[0])
 
 plt.show()

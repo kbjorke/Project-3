@@ -91,10 +91,6 @@ void Planetary_System::evolve(char *output_filename,
     for (i = 0; i < objects; i++)
     {
         myfile << celest_bodies[i].ID << '\t';
-        /*
-        myfile << "Position," << celest_bodies[i].ID << '\t'
-               << "Velocity," << celest_bodies[i].ID << '\t';
-        */
     }
     myfile << "Total energy" << '\t' << "Total momentum" << endl;
 
@@ -117,22 +113,10 @@ void Planetary_System::evolve(char *output_filename,
             }
             myfile << celest_bodies[i].position[j];
         }
-        //myfile << "," << celest_bodies[i].kinetic_energy;
-        //myfile << "," << celest_bodies[i].potential_energy;
-        //myfile << "," << celest_bodies[i].velocity[0]*
-        //          celest_bodies[i].mass;
-        //myfile << "," << celest_bodies[i].velocity[1]*
-        //          celest_bodies[i].mass;
-        myfile << ")" << '\t'; // << "(";
-        /*
-        for( j = 0; j < dimension; j++ ){
-            if (j > 0 ){
-                myfile << ",";
-            }
-            myfile << celest_bodies[i].velocity[j];
-        }
+        myfile << "," << celest_bodies[i].kinetic_energy;
+        myfile << "," << celest_bodies[i].potential_energy;
         myfile << ")" << '\t';
-        */
+
     }
     myfile << total_energy << '\t';
     myfile << "(";
@@ -190,22 +174,10 @@ void Planetary_System::evolve(char *output_filename,
                 }
                 myfile << celest_bodies[i].position[j];
             }
-            //myfile << "," << celest_bodies[i].kinetic_energy;
-            //myfile << "," << celest_bodies[i].potential_energy;
-            //myfile << "," << celest_bodies[i].velocity[0]*
-            //          celest_bodies[i].mass;
-            //myfile << "," << celest_bodies[i].velocity[1]*
-            //          celest_bodies[i].mass;
-            myfile << ")" << '\t'; // << "(";
-            /*
-            for( j = 0; j < dimension; j++ ){
-                if (j > 0 ){
-                    myfile << ",";
-                }
-                myfile << celest_bodies[i].velocity[j];
-            }
+            myfile << "," << celest_bodies[i].kinetic_energy;
+            myfile << "," << celest_bodies[i].potential_energy;
             myfile << ")" << '\t';
-            */
+
         }
         myfile << total_energy << '\t';
         myfile << "(";
@@ -229,7 +201,7 @@ mat Planetary_System::gravity_function(double t, mat u)
     static double distance;
     static double pi = 3.1415926535897;
 
-    double force; //[dimension];
+    double force;
     double potential;
     static mat u_new(objects, dimension*2);
 
@@ -249,12 +221,6 @@ mat Planetary_System::gravity_function(double t, mat u)
             potential = 0;
 
             force = 0;
-            /*
-            for( i = 0; i < dimension; i++ )
-            {
-                force[i] = 0;
-            }
-            */
 
             if( object != other_object )
             {
@@ -268,13 +234,6 @@ mat Planetary_System::gravity_function(double t, mat u)
 
                 force = -(4*pi*pi*celest_bodies[other_object].mass)/
                             pow(distance,3);
-                /*
-                for( i = 0; i < dimension; i++ )
-                {
-                    force[i] = -(4*pi*pi*celest_bodies[other_object].mass)/
-                            pow(distance,3);
-                }
-                */
 
                 potential = -(4*pi*pi*celest_bodies[object].mass*
                               celest_bodies[other_object].mass)/distance;

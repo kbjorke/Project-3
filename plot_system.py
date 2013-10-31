@@ -21,6 +21,8 @@ for line in input_file:
         
         positions = np.zeros([object_nr, dimensions, steps])
         time = np.zeros(steps)
+        kinetic_energy = np.zeros([object_nr, steps])
+        potential_energy = np.zeros([object_nr, steps])
         total_energy = np.zeros(steps)
         total_momentum = np.zeros([dimensions,steps])
         objects = []
@@ -36,6 +38,9 @@ for line in input_file:
             coordinate = column[j+1][1:-1].split(",")
             for k in range(dimensions):
                 positions[j][k][i] = float(coordinate[k])
+                
+            kinetic_energy[j][i] = float(coordinate[dimensions])
+            potential_energy[j][i] = float(coordinate[dimensions+1])
             
         total_energy[i] = float(column[object_nr+1])
 
@@ -44,11 +49,11 @@ for line in input_file:
             total_momentum[k][i] = float(momentum[k])
 
 
+
     i += 1
 
-
-
 input_file.close()
+
 
 if dimensions == 2:
 
@@ -72,20 +77,32 @@ if dimensions == 2:
             fancybox=True, shadow=True)
 
 
-fig2 = plt.figure(2)
+plt.figure(2)
 for j in range(dimensions):
     plt.plot(time, total_momentum[j])
     plt.hold('on')
 plt.hold('off')
 plt.grid('on')
 plt.xlabel(r'Time [$yr$]')
-plt.ylabel(r'Total Momentum [$M_{sun}\frac{AU}{yr}$]')
+plt.ylabel(r'Total Momentum [$M_{sun} \cdot \frac{AU}{yr}$]')
 plt.legend(['x-direction', 'y-direction'])
 
 plt.figure(3)
 plt.plot(time,total_energy)
 plt.grid('on')
 plt.xlabel(r'Time [$yr$]')
-plt.ylabel(r'Total Energy 
+plt.ylabel(r'Total Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
+
+plt.figure(4)
+for i in range(object_nr):
+    if( objects[i] == "Earth" ):
+        plt.plot(time, kinetic_energy[i])
+        plt.hold('on')
+        plt.plot(time, potential_energy[i])
+plt.hold('off')
+plt.grid('on')
+plt.xlabel(r'Time [$yr$]')
+plt.ylabel(r'Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
+plt.legend(['Kinetic energy', 'Potential energy'])
 
 plt.show()

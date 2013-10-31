@@ -1,6 +1,7 @@
 #include <armadillo>
 #include <cmath>
 #include <fstream>
+#include <cstring>
 #include "planetary_system.h"
 #include "celestial_body.h"
 #include "RungeKutta4.h"
@@ -105,8 +106,9 @@ void Planetary_System::evolve(char *output_filename,
         }
     }
 
-    myfile << "0" << '\t';
+    myfile.precision(10);
     myfile << scientific;
+    myfile << "0" << '\t' << '\t' << '\t' << '\t' << '\t';
     for( i = 0; i < objects; i++ ){
         myfile << "(";
         for( j = 0; j < dimension; j++ ){
@@ -117,10 +119,10 @@ void Planetary_System::evolve(char *output_filename,
         }
         //myfile << "," << celest_bodies[i].kinetic_energy;
         //myfile << "," << celest_bodies[i].potential_energy;
-        myfile << "," << celest_bodies[i].velocity[0]*
-                  celest_bodies[i].mass;
-        myfile << "," << celest_bodies[i].velocity[1]*
-                  celest_bodies[i].mass;
+        //myfile << "," << celest_bodies[i].velocity[0]*
+        //          celest_bodies[i].mass;
+        //myfile << "," << celest_bodies[i].velocity[1]*
+        //          celest_bodies[i].mass;
         myfile << ")" << '\t'; // << "(";
         /*
         for( j = 0; j < dimension; j++ ){
@@ -190,10 +192,10 @@ void Planetary_System::evolve(char *output_filename,
             }
             //myfile << "," << celest_bodies[i].kinetic_energy;
             //myfile << "," << celest_bodies[i].potential_energy;
-            myfile << "," << celest_bodies[i].velocity[0]*
-                      celest_bodies[i].mass;
-            myfile << "," << celest_bodies[i].velocity[1]*
-                      celest_bodies[i].mass;
+            //myfile << "," << celest_bodies[i].velocity[0]*
+            //          celest_bodies[i].mass;
+            //myfile << "," << celest_bodies[i].velocity[1]*
+            //          celest_bodies[i].mass;
             myfile << ")" << '\t'; // << "(";
             /*
             for( j = 0; j < dimension; j++ ){
@@ -291,5 +293,75 @@ mat Planetary_System::gravity_function(double t, mat u)
     }
 
     return u_new;
+}
+
+void Planetary_System::adjust_to_CM()
+{
+    static int object, i;
+
+    double total_mass;
+    double CM[dimension];
+
+    for( i = 0; i < dimension; i++ ){
+        CM[i] = 0;
+    }
+    total_mass = 0;
+
+    for( object = 0; object < objects; object++ )
+    {
+        for( i = 0; i < dimension; i++ )
+        {
+            CM[i] += celest_bodies[object].position[i]*
+                    celest_bodies[object].mass;
+        }
+
+        total_mass += celest_bodies[object].mass;
+    }
+
+    for( i = 0; i < dimension; i++ ){
+        CM[i] = CM[i]/total_mass;
+    }
+
+
+    for( object = 0; object < objects; object++ )
+    {
+        for( i = 0; i < dimension; i++ )
+        {
+            celest_bodies[object].position[i] -=
+                    CM[i];
+        }
+    }
+}
+
+void Planetary_System::fix_momentum(char *fix_object)
+{
+    static int object, i;
+
+
+
+    for( object = 0; object < objects; object++ )
+    {
+        if( string(celest_bodies[object].ID).find(fix_object) !=
+                string::npos)
+        {
+            for( i = 0; i < dimension; i++ )
+            {
+                celest_bodies[object].velocity[i] -=
+                        total_momentum[i]/celest_bodies[object].mass;
+            }
+        }
+    }
+
+    for( i = 0; i < dimension; i++ ){
+        total_momentum[i] = 0;
+    }
+    for( object = 0; object < objects; object++ )
+    {
+        for( i = 0; i < dimension; i++ )
+        {
+            total_momentum[i] += celest_bodies[object].velocity[i]*
+                    celest_bodies[object].mass;
+        }
+    }
 }
 

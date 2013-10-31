@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # filename = sys.argv[-1]
-filename = "../Project3-build/output_EarthJupiterSunSystem.txt"
+filename = "../Project3-build/output_EarthSunSystem.txt"
 
 input_file = open(filename, 'r')
 
@@ -52,25 +52,40 @@ input_file.close()
 
 if dimensions == 2:
 
-    plt.figure(1)
+    fig = plt.figure(1)
+    ax = fig.add_subplot(111, 
+            xlabel=r'x-position [$AU$]',
+            ylabel=r'y-position [$AU$]');
     for j in range(object_nr):
         if objects[j] == "Sun":
-            plt.plot(positions[j][0], positions[j][1], 'or')
+            ax.plot(positions[j][0], positions[j][1], 'or',
+                    label=objects[j])
         else:
-            plt.plot(positions[j][0], positions[j][1])
-        plt.hold('on')
+            ax.plot(positions[j][0], positions[j][1],
+                    label=objects[j])
+    
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width*0.8, box.height])
+    ax.axis("equal")
+    ax.grid('on')
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
+            fancybox=True, shadow=True)
 
-    plt.axis("equal")
-    plt.hold('off')
 
-plt.figure(2)
+fig2 = plt.figure(2)
 for j in range(dimensions):
-    plt.plot(time, total_momentum[j]/max(total_momentum[j]))
+    plt.plot(time, total_momentum[j])
     plt.hold('on')
 plt.hold('off')
-plt.axis([0,end_time, -1.3, 1.3])
+plt.grid('on')
+plt.xlabel(r'Time [$yr$]')
+plt.ylabel(r'Total Momentum [$M_{sun}\frac{AU}{yr}$]')
+plt.legend(['x-direction', 'y-direction'])
 
 plt.figure(3)
-plt.plot(time,total_energy/total_energy[0])
+plt.plot(time,total_energy)
+plt.grid('on')
+plt.xlabel(r'Time [$yr$]')
+plt.ylabel(r'Total Energy 
 
 plt.show()

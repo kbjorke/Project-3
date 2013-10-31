@@ -13,7 +13,11 @@ int main(int argc, char* argv[])
 {
     int objects, dimension, i;
     double end_time, time_step;
-    char *input_file, output_file[40], buffer[40];
+    char *input_file, *fix_object;
+    char output_file[40], buffer[40];
+
+    bool fix_momentum = false;
+    bool adjust_to_CM = false;
 
     input_file = argv[argc-1];
 
@@ -26,8 +30,18 @@ int main(int argc, char* argv[])
                 (string(argv[i]).find("h")!=string::npos)){
             time_step = atof(argv[i+1]);
         }
+        if((string(argv[i]).find("-") == 0) &&
+                (string(argv[i]).find("fix")!=string::npos)){
+            fix_object = argv[i+1];
+            fix_momentum = true;
+        }
+        if( string(argv[i]).find("-CM") == 0 ){
+            adjust_to_CM = true;
+        }
     }
 
+
+    output_file[0] = '\0';
     strcpy(buffer, input_file);
     strcat(output_file, "output_");
     strcat(output_file, strtok(buffer, "."));
@@ -39,6 +53,12 @@ int main(int argc, char* argv[])
 
     Planetary_System planetary_system(celest_bodies, objects, dimension);
 
+    if( adjust_to_CM ){
+        planetary_system.adjust_to_CM();
+    }
+    if( fix_momentum ){
+        planetary_system.fix_momentum(fix_object);
+    }
+
     planetary_system.evolve(output_file, end_time, time_step);
 }
-

@@ -22,6 +22,8 @@ public:
     void evolve(char *output_filename,
                 double end_time, double time_step);
     mat gravity_function(double t, mat u);
+    void adjust_to_CM();
+    void fix_momentum(char *fix_object);
 };
 
 #endif // PLANETARY_SYSTEM_H

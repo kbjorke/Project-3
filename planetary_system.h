@@ -12,6 +12,7 @@ class Planetary_System
     int dimension;
     double total_energy, *total_momentum;
     double time;
+    bool *stationary;
 
 public:
     Celestial_Body *celest_bodies;
@@ -24,6 +25,7 @@ public:
     mat gravity_function(double t, mat u);
     void adjust_to_CM();
     void fix_momentum(char *fix_object);
+    void set_stationary(char *stationary_object);
 };
 
 #endif // PLANETARY_SYSTEM_H

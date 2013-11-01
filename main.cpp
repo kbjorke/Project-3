@@ -13,11 +13,12 @@ int main(int argc, char* argv[])
 {
     int objects, dimension, i;
     double end_time, time_step;
-    char *input_file, *fix_object;
+    char *input_file, *fix_object, *stationary_object;
     char output_file[40], buffer[40];
 
     bool fix_momentum = false;
     bool adjust_to_CM = false;
+    bool set_stationary = false;
 
     input_file = argv[argc-1];
 
@@ -37,6 +38,10 @@ int main(int argc, char* argv[])
         }
         if( string(argv[i]).find("-CM") == 0 ){
             adjust_to_CM = true;
+        }
+        if( string(argv[i]).find("-statio") == 0 ){
+            stationary_object = argv[i+1];
+            set_stationary = true;
         }
     }
 
@@ -59,6 +64,9 @@ int main(int argc, char* argv[])
     }
     if( fix_momentum ){
         planetary_system.fix_momentum(fix_object);
+    }
+    if( set_stationary ){
+        planetary_system.set_stationary(stationary_object);
     }
 
     planetary_system.evolve(output_file, end_time, time_step);

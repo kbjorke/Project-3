@@ -24,6 +24,10 @@ Planetary_System::Planetary_System(Celestial_Body *celest_bodies,
     static double distance;
     static double pi = 3.1415926535897;
 
+    for( object = 0; object < objects; object++ ){
+        stationary[object] = false;
+    }
+
     total_energy = 0;
 
     total_momentum = new double[dimension];
@@ -244,8 +248,10 @@ mat Planetary_System::gravity_function(double t, mat u)
                 }
                 for( i = 0; i < dimension; i++ )
                 {
-                    u_new(object, dimension+i) += force* //[i]*
-                            (u(object,i) - u(other_object,i));
+                    if( stationary[object] == false ){
+                        u_new(object, dimension+i) += force*
+                                (u(object,i) - u(other_object,i));
+                    }
                 }
             }
         }
@@ -296,8 +302,6 @@ void Planetary_System::fix_momentum(char *fix_object)
 {
     static int object, i;
 
-
-
     for( object = 0; object < objects; object++ )
     {
         if( string(celest_bodies[object].ID).find(fix_object) !=
@@ -324,3 +328,16 @@ void Planetary_System::fix_momentum(char *fix_object)
     }
 }
 
+void Planetary_System::set_stationary(char *stationary_object)
+{
+    static int object;
+
+    for( object = 0; object < objects; object++ )
+    {
+        if( string(celest_bodies[object].ID).find(stationary_object) !=
+                string::npos)
+        {
+            stationary[object] = true;
+        }
+    }
+}

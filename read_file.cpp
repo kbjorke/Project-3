@@ -10,7 +10,7 @@ using namespace std;
 void read_file(char* filename, Celestial_Body **celest_bodies,
                int *objects, int *dimension)
 {
-    char ID[20], dummy[20], pos[20], vel[20];
+    char ID[40], dummy[40], pos[40], vel[40];
     char *p_value, *v_value;
     int dim, objec, planet_nr, i;
     double mass;

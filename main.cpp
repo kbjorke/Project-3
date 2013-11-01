@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
     }
 
 
+
     output_file[0] = '\0';
     strcpy(buffer, input_file);
     strcat(output_file, "output_");

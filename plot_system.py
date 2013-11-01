@@ -1,9 +1,11 @@
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 # filename = sys.argv[-1]
-filename = "../Project3-build/output_EarthSunSystem.txt"
+filename = "../Project3-build/output_SolarSystem3d.txt"
 
 input_file = open(filename, 'r')
 
@@ -76,16 +78,51 @@ if dimensions == 2:
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
             fancybox=True, shadow=True)
 
+    plt.figure(2)
+    for j in range(dimensions):
+        plt.plot(time, total_momentum[j])
+        plt.hold('on')
+    plt.hold('off')
+    plt.grid('on')
+    plt.xlabel(r'Time [$yr$]')
+    plt.ylabel(r'Total Momentum [$M_{sun} \cdot \frac{AU}{yr}$]')
+    plt.legend(['x-direction', 'y-direction'])
 
-plt.figure(2)
-for j in range(dimensions):
-    plt.plot(time, total_momentum[j])
-    plt.hold('on')
-plt.hold('off')
-plt.grid('on')
-plt.xlabel(r'Time [$yr$]')
-plt.ylabel(r'Total Momentum [$M_{sun} \cdot \frac{AU}{yr}$]')
-plt.legend(['x-direction', 'y-direction'])
+elif dimensions == 3:
+
+    fig = plt.figure(1)
+    ax = fig.gca(projection='3d',
+            xlabel='x-position [AU]',
+            ylabel='y-position [AU]',
+            zlabel='z-position [AU]')
+    for j in range(object_nr):
+        if objects[j] == "Sun":
+            ax.plot(positions[j][0], positions[j][1],
+                    positions[j][2], 'or',
+                    label=objects[j])
+        else:
+            ax.plot(positions[j][0], positions[j][1],
+                    positions[j][2],
+                    label=objects[j])
+    
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width*0.8, box.height])
+    ax.set_zlim3d(-1,1)
+    ax.grid('on')
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
+            fancybox=True, shadow=True)
+
+
+    plt.figure(2)
+    for j in range(dimensions):
+        plt.plot(time, total_momentum[j])
+        plt.hold('on')
+    plt.hold('off')
+    plt.grid('on')
+    plt.xlabel(r'Time [$yr$]')
+    plt.ylabel(r'Total Momentum [$M_{sun} \cdot \frac{AU}{yr}$]')
+    plt.legend(['x-direction', 'y-direction',
+        'z-direction'])
 
 plt.figure(3)
 plt.plot(time,total_energy)
@@ -93,16 +130,17 @@ plt.grid('on')
 plt.xlabel(r'Time [$yr$]')
 plt.ylabel(r'Total Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
 
-plt.figure(4)
-for i in range(object_nr):
-    if( objects[i] == "Earth" ):
-        plt.plot(time, kinetic_energy[i])
-        plt.hold('on')
-        plt.plot(time, potential_energy[i])
-plt.hold('off')
-plt.grid('on')
-plt.xlabel(r'Time [$yr$]')
-plt.ylabel(r'Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
-plt.legend(['Kinetic energy', 'Potential energy'])
+if object_nr == 3:
+    plt.figure(4)
+    for i in range(object_nr):
+        if( objects[i] == "Earth" ):
+            plt.plot(time, kinetic_energy[i])
+            plt.hold('on')
+            plt.plot(time, potential_energy[i])
+    plt.hold('off')
+    plt.grid('on')
+    plt.xlabel(r'Time [$yr$]')
+    plt.ylabel(r'Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
+    plt.legend(['Kinetic energy', 'Potential energy'])
 
 plt.show()

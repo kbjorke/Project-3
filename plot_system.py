@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 # filename = sys.argv[-1]
-filename = "../Project3-build/output_SolarSystem3d.txt"
+filename = "../Project3-build/output_EarthJupiterSunSystem.txt"
 
 input_file = open(filename, 'r')
 
@@ -95,6 +95,10 @@ elif dimensions == 3:
             xlabel='x-position [AU]',
             ylabel='y-position [AU]',
             zlabel='z-position [AU]')
+    # Get dark background for 3d plot:
+    # ax.w_xaxis.set_pane_color((0.0,0.0,0.0,0.8))
+    # ax.w_yaxis.set_pane_color((0.0,0.0,0.0,0.8))
+    # ax.w_zaxis.set_pane_color((0.0,0.0,0.0,0.8))
     for j in range(object_nr):
         if objects[j] == "Sun":
             ax.plot(positions[j][0], positions[j][1],
@@ -107,7 +111,7 @@ elif dimensions == 3:
     
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width*0.8, box.height])
-    ax.set_zlim3d(-1,1)
+    #ax.set_lim3d(-4,4)
     ax.grid('on')
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
             fancybox=True, shadow=True)
@@ -130,7 +134,7 @@ plt.grid('on')
 plt.xlabel(r'Time [$yr$]')
 plt.ylabel(r'Total Energy [$M_{sun} \cdot \frac{AU^2}{yr^2}$]')
 
-if object_nr == 3:
+if ( object_nr <= 3 ):
     plt.figure(4)
     for i in range(object_nr):
         if( objects[i] == "Earth" ):

@@ -51,8 +51,8 @@ Planetary_System::Planetary_System(Celestial_Body *celest_bodies,
                 distance = sqrt(distance);
 
                 celest_bodies[object].potential_energy -=
-                        (4*pi*pi*celest_bodies[other_object].mass*
-                         celest_bodies[object].mass)/distance;
+                            (4*pi*pi*celest_bodies[other_object].mass*
+                             celest_bodies[object].mass)/distance;
             }
         }
         total_energy += celest_bodies[object].potential_energy +
@@ -239,8 +239,11 @@ mat Planetary_System::gravity_function(double t, mat u)
                 force = -(4*pi*pi*celest_bodies[other_object].mass)/
                             pow(distance,3);
 
-                potential = -(4*pi*pi*celest_bodies[object].mass*
-                              celest_bodies[other_object].mass)/distance;
+
+                if( stationary[object] == false ){
+                    potential = -(4*pi*pi*celest_bodies[object].mass*
+                                  celest_bodies[other_object].mass)/distance;
+                }
 
                 if( t == time ){
                         celest_bodies[object].potential_energy +=
@@ -258,6 +261,22 @@ mat Planetary_System::gravity_function(double t, mat u)
     }
 
     return u_new;
+}
+
+void Planetary_System::set_stationary(char *stationary_object)
+{
+    static int object;
+
+    for( object = 0; object < objects; object++ )
+    {
+        if( string(celest_bodies[object].ID).find(stationary_object) !=
+                string::npos)
+        {
+            stationary[object] = true;
+            total_energy -= celest_bodies[object].potential_energy;
+            celest_bodies[object].potential_energy = 0;
+        }
+    }
 }
 
 void Planetary_System::adjust_to_CM()
@@ -324,20 +343,6 @@ void Planetary_System::fix_momentum(char *fix_object)
         {
             total_momentum[i] += celest_bodies[object].velocity[i]*
                     celest_bodies[object].mass;
-        }
-    }
-}
-
-void Planetary_System::set_stationary(char *stationary_object)
-{
-    static int object;
-
-    for( object = 0; object < objects; object++ )
-    {
-        if( string(celest_bodies[object].ID).find(stationary_object) !=
-                string::npos)
-        {
-            stationary[object] = true;
         }
     }
 }

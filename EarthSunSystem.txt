@@ -1,0 +1,4 @@
+Dimension:  2     Objects:  2
+ID          Mass        Position(x,y)[AU]   Velocity(vx,vy)[AU/yr]
+Earth       6e24        (1.0,0)             (0,6.2832)
+Sun         2e30        (0,0)               (0,0)

@@ -1,0 +1,5 @@
+Dimension:  2     Objects:  3
+ID          Mass        Position(x,y)[AU]   Velocity(vx,vy)[AU/yr]
+Earth       6e24        (0.2421,-0.9875)    (6.0,1.472)
+Jupiter     1.9e27      (4.8414,-1.1603)    (0.606,2.812)
+Sun         2e30        (0,0)               (0,0)

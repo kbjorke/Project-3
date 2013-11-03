@@ -7,6 +7,25 @@
 
 using namespace std;
 
+/* Function that reads a file containing the ID, mass and initial
+ * conditions for a set of celestial objects. Generates a
+ * Celestial_Body instance for each of the objects, which
+ * it stores in a Celestial_Body array.
+ *
+ * Input:
+ * 			- *filename: filename of the file cotaining the data
+ *
+ * 			- **celest_bodies: a pointer to an uninitialized
+ *							   array of Celestial_Body instances.
+ *
+ *			- *object: pointer to value containing number of objects
+ *					   in the input file.
+ *
+ * 			- *dimension: pinter to the value containing the
+ * 						  dimensionality of the problem.
+ *
+ * */
+
 void read_file(char* filename, Celestial_Body **celest_bodies,
                int *objects, int *dimension)
 {
@@ -15,26 +34,37 @@ void read_file(char* filename, Celestial_Body **celest_bodies,
     int dim, objec, planet_nr, i;
     double mass;
 
-
     fstream input_file;
     input_file.open(filename, ios::in);
 
+    // Reads out first line of the input file, which contains
+    // number of objects and dimensionality:
     input_file >> dummy >> dim >> dummy >> objec;
     *objects = objec;
     *dimension = dim;
 
+
     double position[*dimension], velocity[*dimension];
 
+    // Initialize the array of Celestial_body wich the pointer
+    // *celest_bodies is pointing at.
     *celest_bodies = new Celestial_Body[objec];
 
+    // Reads out second line of input file, contains nothing of
+    // importans.
     input_file >> dummy >> dummy >> dummy >> dummy;
 
+    // Loop which reads the rest of the lines, which contains
+    // ID, mass and initial position and velocity for each
+    // object. Then creates a instance of Celestial_Body in the
+    // *celest_bodies array.
     planet_nr = 0;
     while( true )
     {
         input_file >> ID >> mass >> pos >> vel;
 
         if( input_file.eof() ) break;
+
 
         p_value = strtok( pos, "(,)" );
         position[0] = atof(p_value);

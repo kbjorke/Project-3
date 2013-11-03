@@ -1,10 +1,16 @@
 #ifndef CELESTIAL_BODY_H
 #define CELESTIAL_BODY_H
 
+/* Class for celestial objects.
+ *
+ * Contains Identification (ID), mass, position, velocity,
+ * kinetic energy and potential energy of a celestial body.
+ * */
+
 class Celestial_Body
 {
 public:
-    char ID[20];
+    char ID[30];
     int dimension;
     double mass; //[1/M_sun]
     double *position, *velocity; //[AU], [AU/yr]
